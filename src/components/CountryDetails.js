@@ -1,25 +1,28 @@
 import {Link} from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-//import axios from 'axios';
-//import { useState , useEffect } from 'react';
+import axios from 'axios';
+import { useState , useEffect } from 'react'; 
 
 const CountryDetails = ({countries}) => {
     const {id} = useParams() 
-    //const [myCountry, setMyCountry] = useState({});
-    //const { alpha3Code } = useParams();
+    const [myCountry, setMyCountry] = useState({})
+    const [loading, setLoading] = useState(false)
 
-    //useEffect(() => {
-      //const fetchData = async () => {
-        //const result = await axios(`https://ih-countries-api.herokuapp.com/countries/${alpha3Code}`);
-        //setMyCountry(result.data);
-      //};
-      //fetchData();}, [alpha3Code]);
+    useEffect(() => {
+      const fetchData = async () => {
+        const result = await axios(`https://ih-countries-api.herokuapp.com/countries/${id}`);
+        setMyCountry(result.data);
+        setLoading(true)
+      };
+      fetchData();}, [id]);
+      console.log(myCountry)
   
-    //const country = myCountry
-    const country = countries.find((country) => country.alpha3Code === id)
+    const country = myCountry
         return(
         <>
             <div key={id} className="col-7">
+            {loading && country.name.common && country.alpha3Code && (
+              <>
             <img style={{ height: "100px", paddingBottom:"10px" }} src={`https://flagpedia.net/data/flags/icon/72x54/${country.alpha2Code.toLowerCase()}.png`} alt="flag" />
             <h1>{country.name.common}</h1>
             <table className="table">
@@ -49,7 +52,9 @@ const CountryDetails = ({countries}) => {
                   </td>
                 </tr>
               </tbody>
-            </table>
+            </table> 
+            </>
+            )}
           </div>
         </>)}
     
